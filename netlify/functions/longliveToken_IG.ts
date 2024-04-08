@@ -33,6 +33,7 @@ export default async (req: Request, context: Context) => {
 
     console.log("--------Request sent to: ", response.url);
     console.log("--------Request sent with parameters: ", params.toString);
+    console.log("--------Got Response as ", response);
 
     const data = await response.json();
     return new Response(data);
