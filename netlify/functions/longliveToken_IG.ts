@@ -27,16 +27,23 @@ export default async (req: Request, context: Context) => {
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-url-encoded' },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params
     });
 
     console.log("--------Request sent to: ", response.url);
-    console.log("--------Request sent with parameters: ", params.toString);
+    console.log("--------Request sent with parameters: ", params);
     console.log("--------Got Response as ", response);
 
-    const data = await response.json();
-    return new Response(data);
+    try {
+      console.log("--------Trying to parse as JSON");
+      const data = await response.json();
+      return new Response(JSON.stringify(data));
+    } catch {
+      console.log("--------JSON parsing failed trying as text now");
+      const data = await response.text();
+      return new Response(data);
+    }
   } catch (error) {
     console.error(error);
     return new Response(error);
